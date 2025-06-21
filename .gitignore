@@ -1,0 +1,54 @@
+# === Python (FastAPI) ===
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.env
+.env.*
+venv/
+instance/
+.DS_Store
+*.db
+
+# FastAPI or Uvicorn cache
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# === Node.js (React) ===
+node_modules/
+build/
+.cache/
+.npm/
+.yarn/
+.yarnrc
+*.log
+
+# === VSCode & IDE settings ===
+.vscode/
+.idea/
+*.swp
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Docker artifacts ===
+*.pid
+docker-compose.override.yml
+
+# === Test results ===
+coverage/
+*.cover
+*.py,cover
+htmlcov/
+nosetests.xml
+coverage.xml
+*.test
+
+# === Misc ===
+*.bak
+*.tmp
+*.orig
+*.old
