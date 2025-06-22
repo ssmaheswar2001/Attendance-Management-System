@@ -2,9 +2,12 @@
 import smtplib
 from email.message import EmailMessage
 import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="../.env")
 
 def send_registration_email(id: str, to_email: str, name: str, roll_no: str):
-    email_sender = os.getenv("EMAIL_HOST")
+    email_sender = os.getenv("EMAIL_USERNAME")
     email_password = os.getenv("EMAIL_PASSWORD")
 
     msg = EmailMessage()

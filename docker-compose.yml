@@ -1,38 +1,44 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     env_file:
-      - backend/.env
-    volumes:
-      - ./backend:/app
+      - .env
     depends_on:
       - db
+    volumes:
+      - ./backend/app:/app/app   # Mount backend app folder for hot reload if you want
+      - ./backend/requirements.txt:/app/requirements.txt
 
   frontend:
     build: ./frontend
     ports:
-      - "3000:80"
+      - "3000:3000"
     depends_on:
       - backend
-
-  db:
-    image: mysql:8
-    restart: always
-    environment:
-      MYSQL_DATABASE: attendance_db
-      MYSQL_ROOT_PASSWORD: 11@May@2001
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 11@May@2001
-      DB_URL: mysql+pymysql://root:11%40May%402001@localhost:3306/Attendance_Management
-    ports:
-      - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./frontend/src:/app/src
 
 volumes:
-  mysql_data:
+  db_data:

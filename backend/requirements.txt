@@ -5,3 +5,9 @@ pymysql
 python-dotenv
 passlib[bcrypt]
 python-jose
+email-validator
+pydantic
+aiofiles
+jinja2
+python-multipart
+cryptography

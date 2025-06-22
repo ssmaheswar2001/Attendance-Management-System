@@ -9,5 +9,5 @@ class User(Base):
     roll_no = Column(String(20), unique=True)
     email = Column(String(100), unique=True, index=True)
     password = Column(String(255))
-    profile_pic = Column(String, default="")
+    profile_pic = Column(String(255), default="")
     is_admin = Column(Boolean, default=False) 

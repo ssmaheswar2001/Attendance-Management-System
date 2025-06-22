@@ -7,7 +7,7 @@ function Logout() {
   useEffect(() => {
     // 1. Clear JWT token
     localStorage.removeItem("token");
-    window.location.reload();
+    // window.location.reload();
 
     // 2. Redirect to home or login after short delay
     

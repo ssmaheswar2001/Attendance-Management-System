@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+# from routes import user, attendance, admin
 from app.routes import user, attendance, admin
 from app.core.database import Base, engine
+# from core.database import Base, engine
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
