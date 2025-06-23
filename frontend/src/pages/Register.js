@@ -5,6 +5,7 @@ import axios from "axios";
 
 
 function Register() {
+  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [formData, setFormData] = useState({
     name: "",
     roll_no: "",
@@ -14,6 +15,7 @@ function Register() {
   const [images, setImages] = useState([]);
   const webcamRef = useRef(null);
   const [message, setMessage] = useState(null);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,7 +52,7 @@ function Register() {
         data.append("files", blob, `image${idx}.png`);
       });
 
-      const response = await axios.post('http://localhost:8000/users/register-with-face', data, { 
+      const response = await axios.post(`http://${IP_ADDRESS}:8000/users/register-with-face`, data, { 
         headers: { 'Content-Type':  "multipart/form-data"},
       });
 

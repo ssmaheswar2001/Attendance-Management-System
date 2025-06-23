@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 function AttendanceCalendar() {
+  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [attendanceDates, setAttendanceDates] = useState([]);
   const [value, setValue] = useState(new Date());
 
@@ -11,7 +12,7 @@ function AttendanceCalendar() {
     const fetchAttendance = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("http://localhost:8000/attendance/history", {
+        const res = await axios.get(`http://${IP_ADDRESS}:8000/attendance/history`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const dates = res.data.map((entry) => new Date(entry.punch_date));

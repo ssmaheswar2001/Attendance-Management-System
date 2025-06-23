@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -13,18 +14,19 @@ function Login() {
     e.preventDefault();
     
     try {
-      const response = await axios.post("http://localhost:8000/users/login", {
+      const response = await axios.post(`http://${IP_ADDRESS}:8000/users/login`, {
         email,
         password,
       });
 
       // SET TOKEN AND FORCE RELOAD TO UPDATE NAVBAR
       localStorage.setItem("token", response.data.access_token);
-      
       setMessage("Login successful!");
       navigate("/profile");
       window.location.reload();
     } catch (error) {
+      console.error("Login error:", error);
+      console.error("Full error response:", error.response);
       setMessage(error.response?.data?.detail || "Login failed");
     }
   };

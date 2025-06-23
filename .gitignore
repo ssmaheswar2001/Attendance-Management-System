@@ -52,3 +52,5 @@ coverage.xml
 *.tmp
 *.orig
 *.old
+
+ams-ec2-key.pem

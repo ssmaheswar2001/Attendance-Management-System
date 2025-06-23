@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 function AdminUsers() {
+  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [users, setUsers] = useState([]);
   const [nameFilter, setNameFilter] = useState("");
   const [emailFilter, setEmailFilter] = useState("");
@@ -28,7 +29,7 @@ function AdminUsers() {
       if (nameFilter) params.name = nameFilter;
       if (emailFilter) params.email = emailFilter;
 
-      axios.get("http://localhost:8000/admin/users", {
+      axios.get(`http://${IP_ADDRESS}:8000/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       })

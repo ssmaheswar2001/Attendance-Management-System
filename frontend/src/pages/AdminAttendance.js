@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 function AdminAttendance() {
+  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userIdFilter, setUserIdFilter] = useState("");
@@ -23,7 +24,7 @@ function AdminAttendance() {
       if (dateFilter) params.punch_date = dateFilter;
 
       setLoading(true);
-      axios.get("http://localhost:8000/admin/attendance", {
+      axios.get(`http://${IP_ADDRESS}:8000/admin/attendance`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       })
