@@ -9,6 +9,7 @@ from app.schemas.token import Token, LoginRequest
 from app.auth.auth_handler import create_access_token
 from app.auth.auth_bearer import get_current_user
 from app.utils.email_utils import send_registration_email
+from app.utils.s3_utils import upload_file_to_s3
 from app.crud.user import create_user, authenticate_user
 from app.core.database import get_db
 from app.models.user import User
@@ -51,20 +52,22 @@ def register_with_face(
 
     new_user = create_user(db=db, user=user)
 
-    # Save images to disk
-    folder_path = Path(f"user_faces/{new_user.id}")
-    folder_path.mkdir(parents=True, exist_ok=True)
-
     for i, file in enumerate(files):
         if not file.content_type.startswith("image/"):
             db.delete(new_user)
             db.commit()
             raise HTTPException(status_code=400, detail="Non-image file uploaded")
-        file_location = folder_path / f"img{i+1}.jpg"
-        with open(file_location, "wb") as buffer:
-            file.file.seek(0) 
-            shutil.copyfileobj(file.file, buffer)
-        print(f"Saving image {i+1} for user {new_user.id} at {file_location}")
+        # Reset file pointer
+        file.file.seek(0)
+        # Define S3 key (folder structure inside the bucket)
+        s3_key = f"user_faces/{new_user.id}/img{i+1}.jpg"
+
+        try:
+            upload_file_to_s3(file.file, s3_key)
+        except Exception as e:
+            db.delete(new_user)
+            db.commit()
+            raise HTTPException(status_code=500, detail="Failed to upload image to S3.")
 
     # Send email in background
     background_tasks.add_task(send_registration_email, new_user.id, new_user.email, new_user.name, new_user.roll_no)

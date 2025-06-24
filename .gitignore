@@ -54,3 +54,4 @@ coverage.xml
 *.old
 
 ams-ec2-key.pem
+s3-uploader-user_accessKeys.csv

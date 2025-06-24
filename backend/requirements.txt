@@ -11,3 +11,4 @@ aiofiles
 jinja2
 python-multipart
 cryptography
+boto3
