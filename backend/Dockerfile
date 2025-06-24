@@ -15,4 +15,5 @@ RUN chmod +x /wait-for-it.sh
 EXPOSE 8000
 
 # Wait for MySQL before starting Uvicorn
-CMD ["/wait-for-it.sh", "db:3306", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["/wait-for-it.sh", "db:3306", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
