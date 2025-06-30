@@ -60,6 +60,6 @@ async def api_root():
         }
     }
 
-app.include_router(user.router)
-app.include_router(attendance.router)
-app.include_router(admin.router)
+app.include_router(user.router, prefix="/api")
+app.include_router(attendance.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
