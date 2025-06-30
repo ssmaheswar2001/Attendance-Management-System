@@ -10,7 +10,8 @@ function Register() {
     name: "",
     roll_no: "",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
   const [images, setImages] = useState([]);
   const webcamRef = useRef(null);
@@ -34,6 +35,12 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("Passwords do not match. Please try again.");
+      return;
+    }
 
     if (images.length < 24) {
       setMessage("Please Upload at least 24 face images");
@@ -115,6 +122,15 @@ function Register() {
           onChange={handleChange} 
           required 
         />
+        <input 
+          type="password" 
+          name="confirmPassword" 
+          placeholder="Re-enter Password" 
+          className="form-control mb-2" 
+          value={formData.confirmPassword}
+          onChange={handleChange} 
+          required 
+        />
 
         {/* WebCam */}
         <div className="mb-3 text-center">
@@ -141,7 +157,7 @@ function Register() {
           </div>
         )}
 
-        <button className="btn btn-primary w-100" type="submit"  disabled={images.length < 24}>
+        <button className="btn btn-primary w-100" type="submit"  disabled={images.length < 24 || formData.password !== formData.confirmPassword}>
           Register
         </button>
       </form>
