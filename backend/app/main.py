@@ -8,7 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="Attendance Management System API",
+    description="AI-Powered Attendance Management System with Face Recognition",
+    version="1.0.0",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc"
+)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
@@ -26,6 +32,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Attendance Management System API",
+        "version": "1.0.0",
+        "docs": "/api/docs",
+        "endpoints": {
+            "users": "/api/users/",
+            "attendance": "/api/attendance/",
+            "admin": "/api/admin/"
+        }
+    }
+
+@app.get("/api/")
+async def api_root():
+    return {
+        "message": "Attendance Management System API",
+        "version": "1.0.0",
+        "docs": "/api/docs",
+        "endpoints": {
+            "users": "/api/users/",
+            "attendance": "/api/attendance/",
+            "admin": "/api/admin/"
+        }
+    }
 
 app.include_router(user.router)
 app.include_router(attendance.router)
