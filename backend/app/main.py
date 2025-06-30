@@ -8,14 +8,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(
-    title="Attendance Management System API",
-    description="AI-Powered Attendance Management System with Face Recognition",
-    version="1.0.0",
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
-)
+# app = FastAPI(
+#     title="Attendance Management System API",
+#     description="AI-Powered Attendance Management System with Face Recognition",
+#     version="1.0.0",
+#     docs_url="/api/docs",
+#     redoc_url="/api/redoc",
+#     openapi_url="/api/openapi.json"
+# )
+
+app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 

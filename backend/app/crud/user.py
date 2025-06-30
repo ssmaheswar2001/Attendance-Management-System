@@ -8,9 +8,9 @@ from app.auth.auth_handler import get_password_hashed, verify_password
 def generate_user_id(db: Session) -> str:
     # Get the highest user ID
     last_user = db.query(User).order_by(User.id.desc()).first()
-    if last_user and re.match(r"U\d{4}", last_user.id):
+    if last_user and re.match(r"U\d{4}", str(last_user.id)):
         # Extract the numeric part and increment
-        last_id_num = int(last_user.id[1:])
+        last_id_num = int(str(last_user.id)[1:])
         new_id_num = last_id_num + 1
     else:
         # If no user found, start from 1
