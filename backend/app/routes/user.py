@@ -27,7 +27,7 @@ def register_user(user: UserCreate, background_tasks: BackgroundTasks, db: Sessi
         raise HTTPException(status_code=400, detail="Roll number already in use")
     new_user = create_user(db=db, user=user)
     # Send email in background
-    background_tasks.add_task(send_registration_email, new_user.id, user.email, user.name, user.roll_no)
+    background_tasks.add_task(send_registration_email, str(new_user.id), user.email, user.name, user.roll_no)
     return new_user
 
 @router.post("/register-with-face", response_model=UserOut)
@@ -53,7 +53,7 @@ def register_with_face(
     new_user = create_user(db=db, user=user)
 
     for i, file in enumerate(files):
-        if not file.content_type.startswith("image/"):
+        if not file.content_type or not file.content_type.startswith("image/"):
             db.delete(new_user)
             db.commit()
             raise HTTPException(status_code=400, detail="Non-image file uploaded")
@@ -70,7 +70,7 @@ def register_with_face(
             raise HTTPException(status_code=500, detail="Failed to upload image to S3.")
 
     # Send email in background
-    background_tasks.add_task(send_registration_email, new_user.id, new_user.email, new_user.name, new_user.roll_no)
+    background_tasks.add_task(send_registration_email, str(new_user.id), str(new_user.email), str(new_user.name), str(new_user.roll_no))
 
     return new_user
 
@@ -93,15 +93,17 @@ def upload_profile_pic(file: UploadFile = File(...), db: Session = Depends(get_d
     if current_user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No filename provided")
     ext = file.filename.split(".")[-1]
-    filename = f"{current_user.id}.{ext}"
+    filename = f"{str(current_user.id)}.{ext}"
     filepath = f"app/static/profile_pics/{filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
     with open(filepath, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    current_user.profile_pic = f"/static/profile_pics/{filename}"
+    current_user.profile_pic = f"/static/profile_pics/{filename}"  # type: ignore
     db.commit()
     db.refresh(current_user)
 
@@ -119,11 +121,11 @@ def update_user_Details(update: UpdateUser, db: Session = Depends(get_db), curre
     if not current_user:
         raise HTTPException(status_code=404, detail="User not found")
     if update.name:
-        current_user.name = update.name
+        current_user.name = update.name  # type: ignore
     if update.roll_no:
-        current_user.roll_no = update.roll_no
+        current_user.roll_no = update.roll_no  # type: ignore
     if update.email:
-        current_user.email = update.email
+        current_user.email = update.email  # type: ignore
     db.commit()
     db.refresh(current_user)
     return current_user
