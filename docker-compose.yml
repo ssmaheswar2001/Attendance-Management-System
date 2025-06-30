@@ -29,6 +29,8 @@ services:
     volumes:
       - ./backend/app:/app/app   # Mount backend app folder for hot reload if you want
       - ./backend/requirements.txt:/app/requirements.txt
+    networks:
+      - app-network
 
   frontend:
     build: ./frontend
@@ -39,7 +41,27 @@ services:
       - backend
     volumes:
       - ./frontend/src:/app/src
-    
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./ssl:/etc/ssl/certs
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 # volumes:
 #   db_data:

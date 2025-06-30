@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getApiUrl, API_URL } from "../config";
 
 
 function Profile() {
-  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [profile, setProfile] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [file, setFile] = useState(null);
@@ -23,7 +23,7 @@ function Profile() {
 
     const fetchData = async () => {
       try {
-        const userRes = await axios.get(`http://${IP_ADDRESS}:8000/users/me`, {
+        const userRes = await axios.get(getApiUrl('/users/me'), {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -34,9 +34,9 @@ function Profile() {
           email: userRes.data.email,
         });
 
-        setImageUrl(`http://localhost:8000${userRes.data.profile_pic}`);
+        setImageUrl(`${API_URL}${userRes.data.profile_pic}`);
 
-        const attendanceRes = await axios.get(`http://${IP_ADDRESS}:8000/attendance/history`, {
+        const attendanceRes = await axios.get(getApiUrl('/attendance/history'), {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAttendance(attendanceRes.data);
@@ -61,7 +61,7 @@ function Profile() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.patch(`http://${IP_ADDRESS}:8000/users/me`, editForm, {
+      const res = await axios.patch(getApiUrl('/users/me'), editForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(res.data);
@@ -88,14 +88,14 @@ function Profile() {
     formData.append("file", file);
 
     try {
-      const response = await axios.post(`http://${IP_ADDRESS}:8000/users/upload-profile-pic`, formData, {
+      const response = await axios.post(getApiUrl('/users/upload-profile-pic'), formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
 
-      setImageUrl(`http://${IP_ADDRESS}:8000${response.data.profile_pic_url}`);
+      setImageUrl(`${API_URL}${response.data.profile_pic_url}`);
     } catch (error) {
       console.error("Error uploading profile picture", error);
     }

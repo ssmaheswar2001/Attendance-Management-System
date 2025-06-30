@@ -12,9 +12,16 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
+# CORS settings - allow both HTTP and HTTPS for development and production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",  # Development
+        "http://attendance-app.com",  # Production HTTP
+        "https://attendance-app.com",  # Production HTTPS
+        "http://www.attendance-app.com",  # Production HTTP with www
+        "https://www.attendance-app.com",  # Production HTTPS with www
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

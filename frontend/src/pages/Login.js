@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../config";
 
 function Login() {
-  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
     
     try {
-      const response = await axios.post(`http://${IP_ADDRESS}:8000/users/login`, {
+      const response = await axios.post(getApiUrl('/users/login'), {
         email,
         password,
       });

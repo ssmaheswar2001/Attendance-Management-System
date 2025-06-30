@@ -2,10 +2,10 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Webcam from "react-webcam"
 import axios from "axios";
+import { getApiUrl } from "../config";
 
 
 function Register() {
-  const IP_ADDRESS = process.env.REACT_APP_API_IP;
   const [formData, setFormData] = useState({
     name: "",
     roll_no: "",
@@ -52,7 +52,7 @@ function Register() {
         data.append("files", blob, `image${idx}.png`);
       });
 
-      const response = await axios.post(`http://${IP_ADDRESS}:8000/users/register-with-face`, data, { 
+      const response = await axios.post(getApiUrl('/users/register-with-face'), data, { 
         headers: { 'Content-Type':  "multipart/form-data"},
       });
 
