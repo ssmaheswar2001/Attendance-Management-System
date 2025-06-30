@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(root_path="/api")
+app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
